@@ -308,7 +308,7 @@ class ListFiles(interfaces.plugins.PluginInterface):
                      vmlinux_module_name: str,
                      pid_filter: Callable[[Any], bool] = None,
                      mnt_filter: Callable[[Any], bool] = lambda _: False
-                     ) -> Tuple[symbols.linux.extensions.mount, List[symbols.linux.extensions.dentry]]:
+                     ):
         """Get a list of all cached dentries in the filesystem that match the given filters."""
         vmlinux = context.modules[vmlinux_module_name]
 
@@ -340,9 +340,7 @@ class ListFiles(interfaces.plugins.PluginInterface):
             # add dentries for this mount to global list
             for dentry_ptr in mount_dentries:
                 dentry = vmlinux.object(object_type='dentry', offset=dentry_ptr, absolute=True)
-                dentries.append((task, mount, dentry))
-        
-        return dentries
+                yield task, mount, dentry
     
     def _generator(self):
         # create path and UID filters
