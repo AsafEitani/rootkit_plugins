@@ -56,10 +56,62 @@ Those helpers are `find_module_owner_by_address` and `get_address_symbols` both 
 
 ### Sequence operations hooking detection <!-- TOC --><a name="seqops"></a>
 <br>
+The `check_seqops` plugin is used to detect hooking on network `seq_operations` structs.
+Sequnece operations hooking is performed by kernel rootkits to avoid detection of network related activity.
+The network symbols checked are:
+- `tcp4_seq_ops`
+- `tcp6_seq_ops`
+- `udp_seq_ops`
+- `udp6_seq_ops`
+- `raw_seq_ops`
+- `raw6_seq_ops`
+
+For each, the 4 operations functions pointers are checked for a hook:
+- `start`
+- `stop`
+- `next`
+- `show`
+
+The plugin determines if one of the operations function pointers is pointing to an area outside of the compiled kernel - defined by `s_text` and `e_text`.
+If such a hook was found, the following information is displayed:
+- `Struct Name` - The name of the hooked stuct, one of the network symbols mentioned above.
+- `Struct Member` - The name of the hooked function pointer, one of the operations functions pointers mentioned above.
+- `Function Address` - The address pointer by the function pointer, which is outside of the compiled kernel.
+- `Function Symbols` - Any symbols that are associated with `Function Address`. Unless the kernel symbols were taken from the victim machine in the time of the attack, this Value will probably be `UNKNOWN` as the hooking function usually resides in the malicious kernel module address space.
+- `Function Owner` - The kernel module in which `Function Address` resides.
 
 
 ### File operations hooking detection <!-- TOC --><a name="fops"></a>
 <br>
+The `check_fops` plugin is used to detect hooking on `file_operations` structs.
+File operations hooking is performed by kernel rootkits to avoid detection of file system related activity.
+Mostly used to hide files, directories and processes from the `procfs`.
+
+The plugin determines if one of the operations function pointers is pointing to an area outside of the compiled kernel - defined by `s_text` and `e_text`.
+
+This plugin operates by iterating over each file on the system with the execptions for files that resides in a kernel module.
+Files like those has their operation pointers point to their kernel module and thus we are unable to detect hooking in the current detection method.
+
+Each operations function pointer for each file in the memory image is being checked.
+
+If a hook was found, the following information is displayed:
+- `Fops Addr` - The address of the `file_opeartions` stuct which one of its pointers were hooked.
+- `Fops Member` - The name of the hooked function pointer. Functions like `iterate` or `read` are the most common ones.
+- `Member Address` - The address pointer by the function pointer, which is outside of the compiled kernel.
+- `Func Symbols` - Any symbols that are associated with `Function Address`. Unless the kernel symbols were taken from the victim machine in the time of the attack, this Value will probably be `UNKNOWN` as the hooking function usually resides in the malicious kernel module address space.
+- `Func Owner` - The kernel module in which `Function Address` resides.
+- `Mount ID` - The mount ID of the file with the hooked operation function.
+- `Inode ID` - The Inode ID of the file with the hooked operation function.
+- `Inode Address` - The Inode address of the file with the hooked operation function.
+- `Mode` - The mode of the file with the hooked operation function.
+- `UID` - The UID value of the file with the hooked operation function.
+- `GID` - The GID value of the file with the hooked operation function.
+- `Size` - The size of the file with the hooked operation function.
+- `Created` - The creation time of the file with the hooked operation function.
+- `Modified` - The modification time of the file with the hooked operation function.
+- `Accessed` - The last access time of the file with the hooked operation function.
+- `File Path` - The file path.
+
 
 ### Fileless detection <!-- TOC --><a name="fileless"></a>
 <br>
