@@ -84,6 +84,7 @@ If such a hook was found, the following information is displayed:
 
 ### File operations hooking detection <!-- TOC --><a name="fops"></a>
 <br>
+
 The `check_fops` plugin is used to detect hooking on `file_operations` structs.
 File operations hooking is performed by kernel rootkits to avoid detection of file system related activity.
 Mostly used to hide files, directories and processes from the `procfs`.
@@ -116,6 +117,7 @@ If a hook was found, the following information is displayed:
 
 ### Fileless detection <!-- TOC --><a name="fileless"></a>
 <br>
+
 The `fileless` plugin is used to detect processes that were created from a temporary file (like `/dev/shm/` or `memfd:`) or that their executable file was deleted after the process creation.
 This technique is often used to avoid detection of disk scanning security solutions and to avoid further investigation of the executable malware.
 
