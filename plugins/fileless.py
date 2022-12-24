@@ -14,10 +14,6 @@ class FilelessProcess(interfaces.plugins.PluginInterface):
         return [
             requirements.ModuleRequirement(name='kernel', description='Linux kernel',
                                            architectures=["Intel32", "Intel64"]),
-            requirements.ListRequirement(name='pid',
-                                         description='',
-                                         element_type=int,
-                                         optional=True),
         ]
 
     @classmethod
