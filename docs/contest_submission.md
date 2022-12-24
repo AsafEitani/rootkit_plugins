@@ -115,5 +115,30 @@ If a hook was found, the following information is displayed:
 
 ### Fileless detection <!-- TOC --><a name="fileless"></a>
 <br>
+The `fileless` plugin is used to detect processes that were created from a temporary file (like `/dev/shm/` or `memfd:`) or that their executable file was deleted after the process creation.
+This technique is often used to avoid detection of disk scanning security solutions and to avoid further investigation of the executable malware.
+
+The plugin detects this by iterating over the running processes and checking if either the executable file has no links in the filesystem to any inode, or if the executable is located on a temporary filesystem like `tmpfs`.
+
+If a fileless process was found the following information is displayed:
+
+- `PID` - The process ID of the fileless process.
+- `Name` - The name of the fileless process.
+- `File Name` - The name of the executable that was used to created the process.
+- `Path` - The path of the executable that was used to created the process.
+- `FS Type` - The filesystem type of the executable file that was used to create the process.
+- `Inode` - The Inode number of the executable file that was used to create the process.
+- `Device` - The device on which the executable file that was used to create the process was created.
+
 
 ## Why should I win the contest? <!-- TOC --><a name="why-should-I-win-the-contest"></a>
+As a enthusiastic supporter of the Volatility framework and a security researcher, I have been using the framework for years on Windows memory images.
+I recently moved into Linux research and found the lack of plugins in Volatility3 to be disturbing.
+This led me to perform a few months of research regarding malicious rootkit techniques that are used in Linux to avoid detection.
+This research ultimetly led to a detecton solution in <a href="https://github.com/aquasecurity/tracee">Tracee</a> and was presented in 2 major conferences - <a href="https://www.youtube.com/watch?v=Z41WJtFsuGc&ab_channel=BSidesTLV">BSidesTLV</a> and <a href="https://www.youtube.com/watch?v=EATX8g3sh-0&ab_channel=AquaSecurity">BlackHat</a>.
+
+I hope that by adding those capabilities to Volatility3, more rootkits will be found and analyzed as the Volatility framework has a unique advantage for detecting those advanced threats.
+The two added methods of kernel hooking combined with the existing `check_syscall` will enable researchers and investigators to find APT malware in the Linux OS.
+The `fileless` plugin will offer researchers the tools to detect simpler malware that try hiding themselves, by that flipping the game - attackers that try to hide are actually more likely to be detected as those techniques are highly malicious.
+
+On a personal note I hope that we can create a set of community plugins, similar to the one that was available in Volatility2, so researchers all around the world can enjoy the fruits of our labor and help take the Volatility frame, and with it the memory forensics field, one step ahead of threat actors.
