@@ -56,6 +56,7 @@ Those helpers are `find_module_owner_by_address` and `get_address_symbols` both 
 
 ### Sequence operations hooking detection <!-- TOC --><a name="seqops"></a>
 <br>
+
 The `check_seqops` plugin is used to detect hooking on network `seq_operations` structs.
 Sequnece operations hooking is performed by kernel rootkits to avoid detection of network related activity.
 The network symbols checked are:
