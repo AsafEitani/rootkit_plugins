@@ -13,7 +13,7 @@ class FilelessProcess(interfaces.plugins.PluginInterface):
     def get_requirements(cls) -> List[interfaces.configuration.RequirementInterface]:
         return [
             requirements.ModuleRequirement(name='kernel', description='Linux kernel',
-                                           architectures=["Intel32", "Intel64"]),
+                                           architectures=["Intel32", "Intel64"])
         ]
 
     @classmethod
